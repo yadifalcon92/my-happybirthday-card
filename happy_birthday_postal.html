@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Feliz Cumpleaños</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Raleway&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Raleway', sans-serif;
+            background: linear-gradient(135deg, #fdf6f0, #fbeff5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .card {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.08);
+            padding: 40px;
+            max-width: 420px;
+            text-align: center;
+            position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 1s forwards;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2em;
+            color: #d4af37;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 30px;
+        }
+        svg {
+            max-width: 200px;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #d4af37;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 18px;
+            font-size: 1em;
+            cursor: pointer;
+            font-family: 'Raleway', sans-serif;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background-color: #c39b2e;
+        }
+        .confetti {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .audio-info {
+            font-size: 0.9em;
+            color: #aaa;
+            margin-top: 20px;
+        }
+        #special-message {
+            font-size: 1.2em;
+            color: #d4af37;
+            font-weight: bold;
+            margin-top: 25px;
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        .flame {
+            transform-origin: center;
+            animation: flameMove 1s infinite ease-in-out alternate;
+        }
+        @keyframes flameMove {
+            from { transform: rotate(-2deg) translateY(0); }
+            to { transform: rotate(2deg) translateY(3px); }
+        }
+    </style>
+</head>
+<body>
+<div class="card" id="card">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-label="Pastel con velas">
+        <!-- Base -->
+        <ellipse cx="100" cy="150" rx="80" ry="20" fill="#f3e5f5"/>
+        <rect x="20" y="90" width="160" height="60" rx="30" fill="#f8bbd0"/>
+        <ellipse cx="100" cy="90" rx="80" ry="20" fill="#f3e5f5"/>
+        <!-- Velas -->
+        <g transform="translate(70,60)">
+            <rect x="0" y="0" width="10" height="30" fill="#ffd54f"/>
+            <!-- Llama ajustada -->
+            <path class="flame" d="M5 -35 C-5 -50 15 -50 5 -35 Z" fill="#ffb74d"/>
+        </g>
+        <g transform="translate(95,55)">
+            <rect x="0" y="0" width="10" height="35" fill="#90caf9"/>
+            <path class="flame" d="M5 -35 C-5 -50 15 -50 5 -35 Z" fill="#ffb74d"/>
+        </g>
+        <g transform="translate(120,60)">
+            <rect x="0" y="0" width="10" height="30" fill="#a5d6a7"/>
+            <path class="flame" d="M5 -35 C-5 -50 15 -50 5 -35 Z" fill="#ffb74d"/>
+        </g>
+    </svg>
+
+    <h1>¡Feliz Cumpleaños!</h1>
+    <p>Que este día esté lleno de momentos hermosos y memorables. ¡Te lo mereces todo!</p>
+
+    <button id="blow-candles-btn" type="button">Soplar las velas ✨</button>
+    <div id="special-message">¡Pide un deseo y brilla todo el año! ✨</div>
+
+    <div class="audio-info" id="audio-info">Toca la tarjeta para escuchar la canción 🎶</div>
+    <audio id="happy-audio" src="happy_birthday.mp3" type="audio/mpeg" preload="auto"></audio>
+</div>
+
+<div class="confetti"></div>
+
+<script>
+    const audio = document.getElementById('happy-audio');
+    const audioInfo = document.getElementById('audio-info');
+    const button = document.getElementById('blow-candles-btn');
+    const specialMessage = document.getElementById('special-message');
+    const flames = document.querySelectorAll('.flame');
+    const card = document.getElementById('card');
+
+    // Primer toque: activar audio
+    card.addEventListener('click', () => {
+        audio.play().catch(() => {});
+        audioInfo.style.display = 'none';
+    }, { once: true });
+
+    function createConfetti() {
+        const c = document.createElement('div');
+        c.style.position = 'absolute';
+        c.style.width = c.style.height = `${Math.random()*8+6}px`;
+        c.style.background = ['#d4af37','#f6d9ec','#fff'][Math.floor(Math.random()*3)];
+        c.style.borderRadius = '50%';
+        c.style.left = `${Math.random()*100}vw`;
+        c.style.top = '-10px';
+        c.style.opacity = Math.random()*0.6+0.4;
+        c.animate([
+            { transform: `rotate(${Math.random()*360}deg)`, top: c.style.top },
+            { transform: `rotate(${Math.random()*360}deg)`, top: '110vh' }
+        ], { duration: Math.random()*2000+3000, easing:'ease-in', fill:'forwards' });
+        setTimeout(() => c.remove(), 4000);
+        return c;
+    }
+    function launchConfetti() {
+        const confettiContainer = document.querySelector('.confetti');
+        for(let i=0; i<40; i++){
+            setTimeout(() => confettiContainer.appendChild(createConfetti()), i*30);
+        }
+    }
+
+    button.addEventListener('click', () => {
+        // Apagar llamas
+        flames.forEach(f => {
+            f.style.transition = "opacity 0.8s ease";
+            f.style.opacity = 0;
+        });
+
+        launchConfetti();
+        specialMessage.style.display = 'block';
+        setTimeout(() => specialMessage.style.opacity = 1, 50);
+
+        // Después de 5 segundos, ocultar mensaje y volver a encender llamas
+        setTimeout(() => {
+            specialMessage.style.opacity = 0;
+            setTimeout(() => {
+                specialMessage.style.display = 'none';
+                flames.forEach(f => {
+                    f.style.transition = "opacity 0.8s ease";
+                    f.style.opacity = 1;
+                });
+            }, 1000);
+        }, 5000);
+    });
+</script>
+</body>
+</html>
